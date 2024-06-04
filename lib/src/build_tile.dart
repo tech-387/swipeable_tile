@@ -66,6 +66,7 @@ class SwipeableTile extends StatefulWidget {
   final bool swipeToTrigger;
 
   final VoidCallback? onDragEnd;
+  final VoidCallback? onDragStart;
 
   /// If there will be any elevation while swiping.
   final bool isElevated;
@@ -87,6 +88,7 @@ class SwipeableTile extends StatefulWidget {
     required this.onSwiped,
     this.swipeThreshold = 0.4,
     this.onDragEnd,
+    this.onDragStart,
     this.confirmSwipe,
     this.borderRadius = 8.0,
     this.direction = SwipeDirection.endToStart,
@@ -124,6 +126,7 @@ class SwipeableTile extends StatefulWidget {
     this.borderRadius = 16,
     this.swipeThreshold = 0.4,
     this.onDragEnd,
+    this.onDragStart,
     this.confirmSwipe,
     this.direction = SwipeDirection.endToStart,
     this.resizeDuration = const Duration(milliseconds: 300),
@@ -155,6 +158,7 @@ class SwipeableTile extends StatefulWidget {
     this.swipeThreshold = 0.4,
     this.borderRadius = 8.0,
     this.onDragEnd,
+    this.onDragStart,
     this.direction = SwipeDirection.endToStart,
     this.movementDuration = const Duration(milliseconds: 200),
     this.behavior = HitTestBehavior.opaque,
@@ -192,6 +196,7 @@ class SwipeableTile extends StatefulWidget {
     this.borderRadius = 16,
     this.swipeThreshold = 0.4,
     this.onDragEnd,
+    this.onDragStart,
     this.direction = SwipeDirection.endToStart,
     this.movementDuration = const Duration(milliseconds: 200),
     this.behavior = HitTestBehavior.opaque,
@@ -265,6 +270,7 @@ class _SwipeableTileState extends State<SwipeableTile>
   }
 
   void _handleDragStart(DragStartDetails details) {
+    widget.onDragStart?.call();
     _dragUnderway = true;
     if (_moveController!.isAnimating) {
       _dragExtent =
