@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'card_tile.dart';
 import '/src/const/enums.dart';
+import 'card_tile.dart';
 import 'normal_tile.dart';
 
 const Curve _kResizeTimeCurve = Interval(0.4, 1.0, curve: Curves.ease);
@@ -65,6 +65,8 @@ class SwipeableTile extends StatefulWidget {
 
   final bool swipeToTrigger;
 
+  final VoidCallback? onDragEnd;
+
   /// If there will be any elevation while swiping.
   final bool isElevated;
 
@@ -84,6 +86,7 @@ class SwipeableTile extends StatefulWidget {
     required this.color,
     required this.onSwiped,
     this.swipeThreshold = 0.4,
+    this.onDragEnd,
     this.confirmSwipe,
     this.borderRadius = 8.0,
     this.direction = SwipeDirection.endToStart,
@@ -120,6 +123,7 @@ class SwipeableTile extends StatefulWidget {
     required this.onSwiped,
     this.borderRadius = 16,
     this.swipeThreshold = 0.4,
+    this.onDragEnd,
     this.confirmSwipe,
     this.direction = SwipeDirection.endToStart,
     this.resizeDuration = const Duration(milliseconds: 300),
@@ -150,6 +154,7 @@ class SwipeableTile extends StatefulWidget {
     required this.onSwiped,
     this.swipeThreshold = 0.4,
     this.borderRadius = 8.0,
+    this.onDragEnd,
     this.direction = SwipeDirection.endToStart,
     this.movementDuration = const Duration(milliseconds: 200),
     this.behavior = HitTestBehavior.opaque,
@@ -186,6 +191,7 @@ class SwipeableTile extends StatefulWidget {
     required this.onSwiped,
     this.borderRadius = 16,
     this.swipeThreshold = 0.4,
+    this.onDragEnd,
     this.direction = SwipeDirection.endToStart,
     this.movementDuration = const Duration(milliseconds: 200),
     this.behavior = HitTestBehavior.opaque,
@@ -366,10 +372,10 @@ class _SwipeableTileState extends State<SwipeableTile>
   Future<void> _handleDragEnd(DragEndDetails details) async {
     if (!_isActive || _moveController!.isAnimating) return;
     _dragUnderway = false;
+    widget.onDragEnd?.call();
+
     if (_moveController!.isCompleted &&
         await _confirmStartResizeAnimation() == true) {
-      ///TODO:changed:Done
-
       if (widget.swipeToTrigger) {
         // final SwipeDirection direction = _swipeDirection;
         // widget.onSwiped(direction);
@@ -414,7 +420,6 @@ class _SwipeableTileState extends State<SwipeableTile>
               _moveController!.forward();
             }
             // _moveController!.forward();
-
           } else {
             _moveController!.reverse();
           }
